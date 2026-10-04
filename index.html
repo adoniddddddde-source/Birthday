@@ -52,13 +52,16 @@
             box-sizing: border-box;
             margin-bottom: 10px;
         }
+        button:disabled {
+            background-color: #ffb3c1;
+            cursor: not-allowed;
+        }
         .btn-container {
             margin-top: 20px;
             position: relative;
             height: 120px;
             width: 100%;
         }
-        /* Mobile-Friendly Buttons */
         #loveBtn {
             background-color: #ff4d6d;
             position: absolute;
@@ -92,7 +95,7 @@
         <h2>Thank you! ✨</h2>
         <p>What is your birthday wish for me?</p>
         <textarea id="wishInput" rows="3" placeholder="Write your wish..."></textarea>
-        <button onclick="nextStep(3)">Submit Wish</button>
+        <button id="submitWishBtn" onclick="submitWishAndNext()">Submit Wish</button>
     </div>
 
     <!-- STEP 3 -->
@@ -101,7 +104,7 @@
         <p style="font-size: 14px; text-align: left;">First of all, since I have a fear of losing you for somebody else (like you have been connecting with others a lot of times), I wanna say that I really, really worry about losing you.</p>
         <p>So, just click if you don't wanna make me feel alone...</p>
         <div class="btn-container">
-            <button id="loveBtn" onclick="nextStep(4)">I won't let you feel that way</button>
+            <button id="loveBtn" onclick="nextStep(4)">I won't let you feel that way 👄👄😘</button>
             <button id="hateBtn" ontouchstart="moveButton(event)" onmouseover="moveButton(event)" onclick="ignoreClick()">I don't care 🙄</button>
         </div>
     </div>
@@ -109,27 +112,25 @@
     <!-- STEP 4 -->
     <div id="step4" style="display: none;">
         <h2>Deal! 🤝</h2>
-        <p>በይ ነገ ወደ ክፍል መተሽ ወይ ደሞ በሆነ አጋጣሚ እኔ ሳላስበው 1 ጊዜ በኩርኩም ትመቺኛለሽ.</p>
-        <button onclick="nextStep(5)">Okay, I will 😚</button>
+        <p>ነገ ወደ ክፍል መተሽ ወይም ደግሞ መንገድ ላይ መተሽ አናቴን 1 ጊዘ በኩርኩም ምቺኝ.</p>
+        <button onclick="nextStep(5)">Okay, እሺ 😚</button>
     </div>
 
     <!-- STEP 5 -->
     <div id="step5" style="display: none;">
         <h2>Final thoughts... 😊🤪</h2>
         <p style="font-size: 14px; text-align: left;">A small thing makes me feel jealousy but I won't do anything cause if I do, I could feel like I am trying to control you, and that is not my personality. So I want you to understand me.</p>
-        <p>And yeah, that is it! I hope you enjoyed, አንቺ ገንገበት 😁🤪</p>
-        <p><strong>Remember:</strong> I dared you to kick my head, so at any time it could be a surprising moment! ደሞ እንዳትረሺው ምኑን ካልሽ ያው ጀዝባዋ እህቴ መሆንሺን ነው</p>
+        <p>And yeah, that is it! I hope you enjoyed, አንቺ አጓዛ 😁🤪</p>
+        <p><strong>Remember:</strong> I dared you to kick my head, so at any time it could be a surprising moment!እንዳትረሺው እሺ!</p>
     </div>
 </div>
 
 <script>
+    const FORMSPREE_ID = "xoevgghl"; 
+
     function nextStep(step) {
         if (step === 2 && document.getElementById('bdayInput').value.trim() === "") {
             alert("Please type Happy Birthday first!");
-            return;
-        }
-        if (step === 3 && document.getElementById('wishInput').value.trim() === "") {
-            alert("Please write a wish!");
             return;
         }
 
@@ -142,21 +143,41 @@
         document.getElementById('step' + step).style.display = 'block';
     }
 
-    // Mobile jump trick
+    function submitWishAndNext() {
+        const wishText = document.getElementById('wishInput').value.trim();
+        if (wishText === "") {
+            alert("Please write a wish!");
+            return;
+        }
+
+        const submitBtn = document.getElementById('submitWishBtn');
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Sending wish...";
+
+        fetch(`https://formspree.io{FORMSPREE_ID}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ wish: wishText })
+        })
+        .then(() => {
+            nextStep(3); 
+        })
+        .catch(() => {
+            nextStep(3); 
+        });
+    }
+
     function moveButton(e) {
-        e.preventDefault(); // Stops the click from happening on mobile touch
+        e.preventDefault(); 
         const btn = document.getElementById('hateBtn');
-        
-        // Generates random jumps on the mobile screen container area
         const randomTop = Math.floor(Math.random() * 80) + 40; 
         const randomLeft = Math.floor(Math.random() * 60) - 30; 
-        
         btn.style.top = randomTop + 'px';
         btn.style.left = randomLeft + 'px';
     }
 
     function ignoreClick() {
-        alert("ተይማ በፍጹም አታደርጊዉም");
+        alert("አይ አይ አይ ይሄንን መምረጥ አይቻልም አንቺ ጀዝባ");
     }
 </script>
 
