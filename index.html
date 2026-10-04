@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Message For You</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #ffe5ec, #ffc2d1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+        .card {
+            background: white;
+            padding: 25px 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 380px;
+            box-sizing: border-box;
+        }
+        h2 { color: #ff4d6d; margin-top: 0; margin-bottom: 15px; font-size: 22px; }
+        p { color: #4a4a4a; line-height: 1.5; font-size: 15px; }
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            border: 2px solid #ffb3c1;
+            border-radius: 10px;
+            font-size: 16px;
+            box-sizing: border-box;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        button {
+            background-color: #ff4d6d;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+        .btn-container {
+            margin-top: 20px;
+            position: relative;
+            height: 120px;
+            width: 100%;
+        }
+        /* Mobile-Friendly Buttons */
+        #loveBtn {
+            background-color: #ff4d6d;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
+        }
+        #hateBtn {
+            background-color: #8d99ae;
+            position: absolute;
+            top: 65px;
+            left: 0;
+            z-index: 1;
+            transition: all 0.1s ease;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <!-- STEP 1 -->
+    <div id="step1">
+        <h2>Hey! It's my birthday agenda... 🎉</h2>
+        <p>Can you please type "Happy Birthday" below?</p>
+        <input type="text" id="bdayInput" placeholder="Type here...">
+        <button onclick="nextStep(2)">Next</button>
+    </div>
+
+    <!-- STEP 2 -->
+    <div id="step2" style="display: none;">
+        <h2>Thank you! ✨</h2>
+        <p>What is your birthday wish for me?</p>
+        <textarea id="wishInput" rows="3" placeholder="Write your wish..."></textarea>
+        <button onclick="nextStep(3)">Submit Wish</button>
+    </div>
+
+    <!-- STEP 3 -->
+    <div id="step3" style="display: none;">
+        <h2>Thank you very much💝</h2>
+        <p style="font-size: 14px; text-align: left;">First of all, since I have a fear of losing you for somebody else (like you have been connecting with others a lot of times), I wanna say that I really, really worry about losing you.</p>
+        <p>So, just click if you don't wanna make me feel alone...</p>
+        <div class="btn-container">
+            <button id="loveBtn" onclick="nextStep(4)">I won't let you feel that way</button>
+            <button id="hateBtn" ontouchstart="moveButton(event)" onmouseover="moveButton(event)" onclick="ignoreClick()">I don't care 🙄</button>
+        </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div id="step4" style="display: none;">
+        <h2>Deal! 🤝</h2>
+        <p>በይ ነገ ወይ ክፍል መተሽ ወይ ደሞ በሆነ አግታሚ እኔ ሳላስበው ወይም ደግሞ እንፈለሽ ብቻ 1 ጊዜ በኩርኩም ትዪኛለሽ.</p>
+        <button onclick="nextStep(5)">Okay, I will 😚</button>
+    </div>
+
+    <!-- STEP 5 -->
+    <div id="step5" style="display: none;">
+        <h2>Final thoughts... 😊🤪</h2>
+        <p style="font-size: 14px; text-align: left;">A small thing makes me feel jealousy but I won't do anything cause if I do, I could feel like I am trying to control you, and that is not my personality. So I want you to understand me.</p>
+        <p>And yeah, that is it! I hope you enjoyed, you dumb 😁🤪</p>
+        <p><strong>Remember:</strong> I dared you to kick my head, so at any time it could be a surprising moment!</p>
+    </div>
+</div>
+
+<script>
+    function nextStep(step) {
+        if (step === 2 && document.getElementById('bdayInput').value.trim() === "") {
+            alert("Please type Happy Birthday first!");
+            return;
+        }
+        if (step === 3 && document.getElementById('wishInput').value.trim() === "") {
+            alert("Please write a wish!");
+            return;
+        }
+
+        document.getElementById('step1').style.display = 'none';
+        document.getElementById('step2').style.display = 'none';
+        document.getElementById('step3').style.display = 'none';
+        document.getElementById('step4').style.display = 'none';
+        document.getElementById('step5').style.display = 'none';
+
+        document.getElementById('step' + step).style.display = 'block';
+    }
+
+    // Mobile jump trick
+    function moveButton(e) {
+        e.preventDefault(); // Stops the click from happening on mobile touch
+        const btn = document.getElementById('hateBtn');
+        
+        // Generates random jumps on the mobile screen container area
+        const randomTop = Math.floor(Math.random() * 80) + 40; 
+        const randomLeft = Math.floor(Math.random() * 60) - 30; 
+        
+        btn.style.top = randomTop + 'px';
+        btn.style.left = randomLeft + 'px';
+    }
+
+    function ignoreClick() {
+        alert("ተይማ በፍጹም አታደርጊዉም");
+    }
+</script>
+
+</body>
+</html>
